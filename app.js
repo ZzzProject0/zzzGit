@@ -26,5 +26,5 @@ app.use('/api', express.urlencoded({ extended: false }), noticeRouter)
 app.use('/api', express.urlencoded({ extended: false }), diaryRouter)
 
 app.listen(port, () => {
-  console.log(`listening at http://13.125.42.68:${port}`)
+  console.log(`listening at http://54.180.109.58:${port}`)
 })
