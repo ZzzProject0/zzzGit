@@ -10,6 +10,7 @@ const authMiddlewares = require('./middlewares/auth-middleware')
 const userRouter = require('./routes/user')
 const noticeRouter = require('./routes/notice')
 const diaryRouter = require('./routes/diary')
+const asmrRouter = require('./routes/asmr')
 
 const connect = require('./schemas')
 connect()
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 app.use('/api', express.urlencoded({ extended: false }), userRouter)
 app.use('/api', express.urlencoded({ extended: false }), noticeRouter)
 app.use('/api', express.urlencoded({ extended: false }), diaryRouter)
+app.use('/api/asmr', express.urlencoded({ extended: false }), asmrRouter)
 
 app.listen(port, () => {
   console.log(`listening at http://54.180.109.58:${port}`)
