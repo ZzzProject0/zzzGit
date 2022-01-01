@@ -64,9 +64,9 @@ router.get('/diary/:userIdx', authMiddleware, async (req, res) => {
 
   // 배열의 값 db에서 찾아서 다 뽑아내기
   const scoreDiary = await Diary.find({ userIdx: userIdx, yearMonth: yearMonth }
-    , { _id: 0, day: 1, feelScore: 1}).sort("inputDay")
+    , { _id: 0, day: 1, feelScore: 1 }).sort("inputDay")
   console.log(scoreDiary); //object
-  const scoreObj = {scoreDiary} // 객체 안 객체 만들기
+  const scoreObj = { scoreDiary } // 객체 안 객체 만들기
   // console.log(scoreObj); // {[{key: value}]}
   // console.log(typeof scoreObj); // object
 
