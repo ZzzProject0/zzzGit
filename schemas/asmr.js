@@ -4,7 +4,7 @@ const autoIncrement = require('mongoose-auto-increment');
 var connection = mongoose.createConnection("mongodb://test:test@54.180.109.58:27017");
 autoIncrement.initialize(connection);
 
-const comment = new Schema(
+const asmrSchema = new Schema(
 	{
 		categoryIdx: { type: Number, required: true },
 		categoryName: { type: String, required: true },
@@ -15,11 +15,11 @@ const comment = new Schema(
 	{ timestamps: true }
 );
 
-comment.plugin(autoIncrement.plugin, {
+asmrSchema.plugin(autoIncrement.plugin, {
 	model: '_id',
 	field: 'id',
 	startAt: 0,
 	increment: 1
 })
 
-module.exports = mongoose.model('Comment', comment);
+module.exports = mongoose.model('asmr', asmrSchema);
