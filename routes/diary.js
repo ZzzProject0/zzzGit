@@ -15,8 +15,14 @@ router.post('/diary', authMiddleware, async (req, res) => {
     if (recentDiary.length !== 0) {
       diaryIdx = recentDiary[0]["diaryIdx"] + 1
     }
-
-    const input = yearMonth + "-" + String(day)
+    let strDay = ""
+    let zeroDay = "0"
+    if(day < 10) {
+      strDay = zeroDay + String(day)
+    } else {
+      strDay = String(day)
+    }
+    let input = yearMonth.substring(0,4) + "-" + yearMonth.substring(4) + "-" + strDay
     let inputDate = moment(input).format('YYYY-MM-DD')
     const createdAt = new Date(+new Date() + 3240 * 10000).toISOString().replace('T', ' ').replace(/\..*/, '')
     let scoreAvg = feelScore + sleepScore
@@ -34,9 +40,10 @@ router.post('/diary', authMiddleware, async (req, res) => {
   }
 })
 
-router.get('/diary/:userIdx', authMiddleware, async (req, res) => {
-  const { userIdx } = req.params
-  const { yearMonth } = req.body
+router.get('/diary/:userIdx/:yearMonth', authMiddleware, async (req, res) => {
+  const { userIdx } = req.params // 28
+  const { yearMonth } = req.params // 2022-1
+  console.log(yearMonth);
   const { user } = res.locals
   try {
     let arrIdx = [parseInt(userIdx)] // Diary schema에 DB 존재하는지 파악
