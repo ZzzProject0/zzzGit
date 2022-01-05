@@ -43,7 +43,6 @@ router.post('/diary', authMiddleware, async (req, res) => {
 router.get('/diary/:userIdx/:yearMonth', authMiddleware, async (req, res) => {
   const { userIdx } = req.params // 28
   const { yearMonth } = req.params // 2022-1
-  console.log(yearMonth);
   const { user } = res.locals
   try {
     let arrIdx = [parseInt(userIdx)] // Diary schema에 DB 존재하는지 파악
