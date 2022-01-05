@@ -24,7 +24,7 @@ router.post('/register', async (req, res) => {
     let loginCnt = 0
 
     let noticeSet = false
-
+    
     const { userId, password } = await registerSchema.validateAsync(req.body)
     if (userId === password) {
       res.status(400).send({
