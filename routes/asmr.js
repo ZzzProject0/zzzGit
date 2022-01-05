@@ -9,8 +9,6 @@ const Asmr = require("../schemas/asmr")
 // line 10  category -> categories  restful name rule
 router.get('/categories/:categoryId', async (req, res) => {
     const { categoryId } = req.params
-
-
     try {
         let target = await Asmr.find({ categoryIdx: categoryId })
         if (!target) {
@@ -29,7 +27,6 @@ router.get('/categories/:categoryId', async (req, res) => {
 });
 
 // ASMR show everything API
-
 router.get('/', async (req, res) => {
     try {
         let target = await Asmr.find({})
