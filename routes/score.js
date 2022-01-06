@@ -116,12 +116,12 @@ router.get('/scores/:userIdx', authMiddleware, async (req, res) => {
 
             //  4/2 = 2배, *100 = 200% || *100 -100 = 100%
             if (lastAvg > thisAvg) {
-              let lastA = lastAvg / thisAvg * 100 - 100
+              let lastA = (lastAvg - thisAvg) * 10
               result += "저번주가 이번주 보다 " + parseInt(lastA) + "% 잠을 더 잘 주무셨네요"
             } else if (lastAvg === thisAvg) {
               result += "오늘은 저번주보다 더 잘 자기로 해요"
             } else {
-              let thisA = thisAvg / lastAvg * 100 - 100
+              let thisA = (thisAvg - lastAvg) * 10
               result += "저번주보다 " + parseInt(thisA) + "% 잠을 더 잘 주무셨네요"
             }
           }
