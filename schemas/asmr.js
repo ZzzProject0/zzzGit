@@ -12,7 +12,7 @@ const asmrSchema = new Schema(
 		title: { type: String, required: true },
 		asmrUrl: { type: String, default: null },
 		iconUrl: { type: String, default: null },
-		copryRight: { type: String, default: null }
+
 	},
 	{ timestamps: true }
 );
