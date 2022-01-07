@@ -1,7 +1,6 @@
 {
   "name": "zzzgit",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,12 +22,16 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "https": "^1.0.0",
     "joi": "^17.5.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "mongoose": "^6.1.4",
     "mongoose-auto-increment": "^5.0.1",
     "morgan": "^1.10.0",
-    "multer": "^1.4.4"
-  }
+    "multer": "^1.4.4",
+    "path": "^0.12.7"
+  },
+  "description": ""
 }
