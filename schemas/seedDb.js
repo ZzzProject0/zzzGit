@@ -126,9 +126,9 @@ let seedDb = [
     {
         categoryIdx: 2,
         categoryName: "물체",
-        title: "차 내리는 소리",
+        title: "차",
         asmrUrl: "https://zzz-asmr-bucket.s3.ap-northeast-2.amazonaws.com/%E1%84%8B%E1%85%B3%E1%86%B7%E1%84%8B%E1%85%AF%E1%86%AB/%E1%84%86%E1%85%AE%E1%86%AF%E1%84%8E%E1%85%A6/%E1%84%8E%E1%85%A1+%E1%84%82%E1%85%A2%E1%84%85%E1%85%B5%E1%84%82%E1%85%B3%E1%86%AB+%E1%84%89%E1%85%A9%E1%84%85%E1%85%B5.mp3",
-        iconUrl: "https://zzz-asmr-bucket.s3.ap-northeast-2.amazonaws.com/%E1%84%8B%E1%85%B5%E1%84%86%E1%85%B5%E1%84%8C%E1%85%B5(png)/%E1%84%86%E1%85%AE%E1%86%AF%E1%84%8E%E1%85%A6/%E1%84%8E%E1%85%A1%E1%84%82%E1%85%A2%E1%84%85%E1%85%B5%E1%84%82%E1%85%B3%E1%86%AB+%E1%84%89%E1%85%A9%E1%84%85%E1%85%B5.png",
+        iconUrl: "https://zzz-asmr-bucket.s3.ap-northeast-2.amazonaws.com/%E1%84%8B%E1%85%B5%E1%84%86%E1%85%B5%E1%84%8C%E1%85%B5(png)/%E1%84%86%E1%85%AE%E1%86%AF%E1%84%8E%E1%85%A6/%E1%84%8E%E1%85%A1.png",
         copryRight: ""
     },
 
@@ -147,7 +147,7 @@ let seedDb = [
     {
         categoryIdx: 2,
         categoryName: "물체",
-        title: "펜쓰는 소리",
+        title: "펜",
         asmrUrl: "https://zzz-asmr-bucket.s3.ap-northeast-2.amazonaws.com/%E1%84%8B%E1%85%B3%E1%86%B7%E1%84%8B%E1%85%AF%E1%86%AB/%E1%84%86%E1%85%AE%E1%86%AF%E1%84%8E%E1%85%A6/%E1%84%91%E1%85%A6%E1%86%AB%E1%84%8A%E1%85%B3%E1%84%82%E1%85%B3%E1%86%AB+%E1%84%89%E1%85%A9%E1%84%85%E1%85%B5.mp3",
         iconUrl: "https://zzz-asmr-bucket.s3.ap-northeast-2.amazonaws.com/%E1%84%8B%E1%85%B5%E1%84%86%E1%85%B5%E1%84%8C%E1%85%B5(png)/%E1%84%86%E1%85%AE%E1%86%AF%E1%84%8E%E1%85%A6/%E1%84%91%E1%85%A6%E1%86%AB.png",
         copryRight: ""
