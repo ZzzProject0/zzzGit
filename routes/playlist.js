@@ -5,14 +5,16 @@ const ERROR = require('../data/error');
 const authMiddleware = require('../middlewares/auth-middleware');
 require('dotenv').config();
 const Asmr = require('../schemas/asmr');
-const Seed = require('../schemas/seedDb');
+const Playlist = require('../schemas/playlists');
 
-// ASMR  category API
-// line 10  category -> categories  restful name rule
-router.get('/categories/:categoryId', async (req, res) => {
-    const { categoryId } = req.params;
+// Playlist API
+
+router.get('/users/:userIdx', async (req, res) => {
+    const { userIdx } = req.params;
+    console.log(userIdx);
+
     try {
-        const target = await Asmr.find({ categoryIdx: categoryId });
+        const target = await Playlist.find({ userIdx });
         if (!target) {
             throw new Error(ERROR.NO_EXISTS_DATA);
         }
@@ -28,21 +30,22 @@ router.get('/categories/:categoryId', async (req, res) => {
     }
 });
 
-// ASMR show everything API
-router.get('/', async (req, res) => {
-    try {
-        const target = await Asmr.find({})
-            .sort('id')
-            .lean();
+// Create a playlist
+router.post('/', async (req, res) => {
+    // userIdx 는 middeleware 에서 가져오나요 ?
+    const {
+        mixTitle, mix,
+    } = req.body;
 
-        if (!target) {
-            throw new Error(ERROR.NO_EXISTS_DATA);
+    console.log(mixTitle, mix);
+    console.log(mix.length);
+
+    try {
+        if (mix.length === 4) {
+            console.log('There is no mix');
         }
-        data = {
-            items: target,
-            total: target.length,
-        };
-        res.json({ msg: 'success', data });
+
+        res.json({ msg: 'success' });
     } catch (err) {
         console.log('err', err);
         res.json({ msg: 'fail' });

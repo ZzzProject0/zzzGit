@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+
 const DiarySchema = new mongoose.Schema({
   diaryIdx: Number,
   yearMonth: String,
@@ -10,7 +11,7 @@ const DiarySchema = new mongoose.Schema({
   inputDate: String,
   createdAt: String,
   updatedAt: String,
-  userIdx: Number
-})
+  userIdx: Number,
+});
 
-module.exports = mongoose.model('Diary', DiarySchema)
+module.exports = mongoose.model('Diary', DiarySchema);

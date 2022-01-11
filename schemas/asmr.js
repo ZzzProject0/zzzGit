@@ -1,9 +1,10 @@
-const mongoose = require("mongoose")
-const { Schema } = mongoose
+const mongoose = require('mongoose');
+
+const { Schema } = mongoose;
 const autoIncrement = require('mongoose-auto-increment');
-require("dotenv").config();
-////var connection = mongoose.createConnection("mongodb://test:test@54.180.109.58:27017");
-//autoIncrement.initialize(connection);
+require('dotenv').config();
+/// /var connection = mongoose.createConnection("mongodb://test:test@54.180.109.58:27017");
+// autoIncrement.initialize(connection);
 
 const asmrSchema = new Schema(
 	{
@@ -14,7 +15,7 @@ const asmrSchema = new Schema(
 		iconUrl: { type: String, default: null },
 
 	},
-	{ timestamps: true }
+	{ timestamps: true },
 );
 
 // asmrSchema.plugin(autoIncrement.plugin, {

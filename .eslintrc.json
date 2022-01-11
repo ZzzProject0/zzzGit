@@ -1,0 +1,18 @@
+{
+    "env": {
+        "browser": true,
+        //"commonjs": true,
+        "es2021": true,
+        "node": true   // require is not defined 
+    },
+    "extends": ["eslint:recommended","airbnb-base"],
+    "parserOptions": {
+        "ecmaVersion": 11,
+        "sourceType": "module"
+    },
+    "rules": {
+        "indent": ["error", 4]
+    }
+}
+
+
