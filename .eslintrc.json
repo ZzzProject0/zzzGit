@@ -10,8 +10,9 @@
         "ecmaVersion": 11,
         "sourceType": "module"
     },
+    
     "rules": {
-        "indent": ["error", 4]
+        "indent": "off"
     }
 }
 

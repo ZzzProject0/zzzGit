@@ -3,8 +3,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const autoIncrement = require('mongoose-auto-increment');
 require('dotenv').config();
-/// /var connection = mongoose.createConnection("mongodb://test:test@54.180.109.58:27017");
-// autoIncrement.initialize(connection);
+
+const dev1 = process.env.DEV;
+const connection = mongoose.createConnection(dev1);
+autoIncrement.initialize(connection);
 
 const playlistsSchema = new Schema(
     {
@@ -26,11 +28,11 @@ const playlistsSchema = new Schema(
     { timestamps: true },
 );
 
-// playlistsSchema.plugin(autoIncrement.plugin, {
-// 	model: '_id',
-// 	field: 'id',
-// 	startAt: 0,
-// 	increment: 1
-// })
+playlistsSchema.plugin(autoIncrement.plugin, {
+    model: '_id',
+    field: 'mixIdx',
+    startAt: 0,
+    increment: 1,
+});
 
 module.exports = mongoose.model('playlist', playlistsSchema);

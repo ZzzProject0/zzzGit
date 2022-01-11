@@ -49,7 +49,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// test
+// TEST
 router.post('/test', async (req, res) => {
     const {
         categoryIdx, categoryName, title, asmrUrl, iconUrl,
@@ -70,7 +70,7 @@ router.post('/test', async (req, res) => {
     }
 });
 
-// test
+// seeding the DB
 router.get('/seed', async (req, res) => {
     // console.log(Seed)
     Seed.forEach(async (element) => {
