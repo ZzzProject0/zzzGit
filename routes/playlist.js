@@ -19,10 +19,19 @@ router.get('/users/:userIdx', async (req, res) => {
             throw new Error(ERROR.NO_EXISTS_DATA);
         }
         console.log(target);
+
         data = {
             items: target,
             total: target.length,
         };
+
+        if (target.asmr4Title !== null) {
+            console.log(this is)
+        }
+
+
+
+
         res.json({ msg: 'success', data });
     } catch (err) {
         console.log('err', err);

@@ -1,42 +1,53 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const passportConfig = require("./passport");
+const cors = require("cors");
 
 const app = express();
 app.use(cors());
-const http = require('http');
-const https = require('https');
+passportConfig();
 
+const http = require("http");
+const https = require("https");
+const passport = require("passport");
+const session = require("express-session");
 const port = 3000;
-const path = require('path');
-const fs = require('fs');
-require('dotenv').config();
-const jwt = require('jsonwebtoken');
-const authMiddlewares = require('./middlewares/auth-middleware');
+const path = require("path");
+const fs = require("fs");
+require("dotenv").config();
 
-const userRouter = require('./routes/user');
-const noticeRouter = require('./routes/notice');
-const diaryRouter = require('./routes/diary');
-const asmrRouter = require('./routes/asmr');
-const playlistRouter = require('./routes/playlist');
+const userRouter = require("./routes/user");
+const noticeRouter = require("./routes/notice");
+const diaryRouter = require("./routes/diary");
+const asmrRouter = require("./routes/asmr");
+const playlistRouter = require("./routes/playlist");
+const authRouter = require("./routes/auth");
+const scoresRouter = require("./routes/score");
 
-const scoresRouter = require('./routes/score');
-
-const connect = require('./schemas');
+const connect = require("./schemas");
 
 connect();
 
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+app.use(
+  session({
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.get('/', (req, res) => {
-  res.send('hello zzz');
+app.get("/", (req, res) => {
+  res.send("Hello Zzz");
 });
 
 // const options = { // letsencrypt로 받은 인증서 경로를 입력
 //   ca: fs.readFileSync('/etc/letsencrypt/live/www.zzzback.shop/fullchain.pem'),
 //   key: fs.readFileSync('/etc/letsencrypt/live/www.zzzback.shop/privkey.pem'),
-//   cert: fs.readFileSync('/etc/letsencrypt/live/www.zzzback.shop/cert.pem'),
+//   cert: fs.readFileSync('/etc/letsencrypt/livge/www.zzzback.shop/cert.pem'),
 // };
 
 app.use('/api', express.urlencoded({ extended: false }), userRouter);
