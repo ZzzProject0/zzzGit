@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const passportConfig = require("./passport");
 const cors = require("cors");
 
@@ -13,6 +14,7 @@ const session = require("express-session");
 const port = 3000;
 const path = require("path");
 const fs = require("fs");
+const morgan = require("morgan");
 require("dotenv").config();
 
 const userRouter = require("./routes/user");
@@ -22,14 +24,16 @@ const asmrRouter = require("./routes/asmr");
 const playlistRouter = require("./routes/playlist");
 const authRouter = require("./routes/auth");
 const scoresRouter = require("./routes/score");
+const pushRouter = require("./routes/push");
 
 const connect = require("./schemas");
 
 connect();
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.json());
+app.use(morgan("combined"));
+app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(express.static(path.join(__dirname, "public")));
+app.use(bodyParser.json());
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,
@@ -39,6 +43,11 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+webpush.setVapidDetails(
+  "mailto: www.zzzapp.co.kr",
+  process.env.VAPID_PUBLIC_KEY,
+  process.env.VAPID_PRIVATE_KEY
+);
 
 app.get("/", (req, res) => {
   res.send("Hello Zzz");
@@ -50,12 +59,18 @@ app.get("/", (req, res) => {
 //   cert: fs.readFileSync('/etc/letsencrypt/livge/www.zzzback.shop/cert.pem'),
 // };
 
-app.use('/api', express.urlencoded({ extended: false }), userRouter);
-app.use('/api', express.urlencoded({ extended: false }), noticeRouter);
-app.use('/api', express.urlencoded({ extended: false }), diaryRouter);
-app.use('/api/asmrTracks', express.urlencoded({ extended: false }), asmrRouter);
-app.use('/api', express.urlencoded({ extended: false }), scoresRouter);
-app.use('/api/playlists', express.urlencoded({ extended: false }), playlistRouter);
+app.use("/api", express.urlencoded({ extended: false }), userRouter);
+app.use("/api", express.urlencoded({ extended: false }), noticeRouter);
+app.use("/api", express.urlencoded({ extended: false }), diaryRouter);
+app.use("/api/asmrTracks", express.urlencoded({ extended: false }), asmrRouter);
+app.use("/api", express.urlencoded({ extended: false }), scoresRouter);
+app.use(
+  "/api/playlists",
+  express.urlencoded({ extended: false }),
+  playlistRouter
+);
+app.use("/auth", express.urlencoded({ extended: false }), authRouter);
+app.use("/api", express.urlencoded({ extended: false }), pushRouter);
 
 // http.createServer(app).listen(port);
 // https.createServer(options, app).listen(443);
