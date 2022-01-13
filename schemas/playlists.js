@@ -12,17 +12,27 @@ const playlistsSchema = new Schema(
     {
         mixIdx: { type: Number, required: true },
         mixTitle: { type: String, required: true },
-        asmr1: { type: String, required: false, default: null },
-        asmr2: { type: String, required: false, default: null },
-        asmr3: { type: String, required: false, default: null },
-        asmr4: { type: String, required: false, default: null },
+        asmr1Title: { type: String, required: true, default: null },
+        asmr2Title: { type: String, required: false, default: null },
+        asmr3Title: { type: String, required: false, default: null },
+        asmr4Title: { type: String, required: false, default: null },
 
-        asmr1Volume: { type: String, required: false, default: null },
-        asmr2Volume: { type: String, required: false, default: null },
-        asmr3Volume: { type: String, required: false, default: null },
-        asmr4Volume: { type: String, required: false, default: null },
+        asmr1Url: { type: String, required: true, default: null },
+        asmr2Url: { type: String, required: false, default: null },
+        asmr3Url: { type: String, required: false, default: null },
+        asmr4Url: { type: String, required: false, default: null },
 
-        userIds: { type: Number, default: null },
+        asmr1Icon: { type: String, required: true, default: null },
+        asmr2Icon: { type: String, required: false, default: null },
+        asmr3Icon: { type: String, required: false, default: null },
+        asmr4Icon: { type: String, required: false, default: null },
+
+        asmr1Volume: { type: Number, required: true, default: null },
+        asmr2Volume: { type: Number, required: false, default: null },
+        asmr3Volume: { type: Number, required: false, default: null },
+        asmr4Volume: { type: Number, required: false, default: null },
+
+        userIdx: { type: Number, default: null },
 
     },
     { timestamps: true },

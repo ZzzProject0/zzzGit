@@ -8,7 +8,7 @@ const Asmr = require('../schemas/asmr');
 const Seed = require('../schemas/seedDb');
 
 // ASMR  category API
-// line 10  category -> categories  restful name rule
+
 router.get('/categories/:categoryId', async (req, res) => {
     const { categoryId } = req.params;
     try {

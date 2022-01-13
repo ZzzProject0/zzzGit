@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 app.use('/api', express.urlencoded({ extended: false }), userRouter);
 app.use('/api', express.urlencoded({ extended: false }), noticeRouter);
 app.use('/api', express.urlencoded({ extended: false }), diaryRouter);
-app.use('/api/asmr', express.urlencoded({ extended: false }), asmrRouter);
+app.use('/api/asmrTracks', express.urlencoded({ extended: false }), asmrRouter);
 app.use('/api', express.urlencoded({ extended: false }), scoresRouter);
 app.use('/api/playlists', express.urlencoded({ extended: false }), playlistRouter);
 
