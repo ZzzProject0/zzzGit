@@ -11,28 +11,34 @@ const Playlist = require('../schemas/playlists');
 
 router.get('/users/:userIdx', async (req, res) => {
     const { userIdx } = req.params;
-    console.log(userIdx);
-
     try {
         const target = await Playlist.find({ userIdx });
         if (!target) {
             throw new Error(ERROR.NO_EXISTS_DATA);
         }
-        console.log(target);
+        console.log(target)
+        console.log(target.mixTitle);
+        console.log(target.mixList);
 
-        data = {
-            items: target,
-            total: target.length,
-        };
+        let mix = []
+        for (let i = 0; i < target.length; i++) {
+            let mixIdx = target[i].mixIdx
+            let mixTitle = target[i].mixTitle
+            let mixList = target[i].mixList
 
-        if (target.asmr4Title !== null) {
-            console.log(this is)
+            mix.push({
+                playlistIdx: mixIdx,
+                mixTitle: mixTitle,
+                mixList
+            })
+
         }
 
+        console.log(mix)
 
 
 
-        res.json({ msg: 'success', data });
+        res.status(201).json(mix);
     } catch (err) {
         console.log('err', err);
         res.json({ msg: 'fail' });
@@ -41,123 +47,31 @@ router.get('/users/:userIdx', async (req, res) => {
 
 // Create a playlist
 router.post('/', authMiddleware, async (req, res) => {
-    // userIdx 는 middeleware 에서 가져오나요 ???
+
     const { userIdx } = res.locals.user;
 
     console.log('creating new playlist');
     const {
-        mixTitle, mix,
+        mixTitle, mixList,
     } = req.body;
 
-    console.log(mix);
+
     try {
-        if (mix.length === 0) {
-            return res.status(204).json({ msg: 'No asmr in the playlist' });
-            // shit shit shit shit shit shit shit
+        console.log(mixTitle, mixList);
+        const newMix = {
+            mixTitle,
+            mixList,
+            userIdx
         }
-
-        const x = mix.length;
-        switch (x) {
-            case 0:
-                return res.status(204).json({ msg: 'No asmr in the playlist' });
-            case 1: {
-                console.log('your trying to add ', mix.length);
-                const newMix = {
-                    mixTitle: req.body.mixTitle,
-                    asmr1Title: mix[0].asmr1Title,
-                    asmr1Url: mix[0].asmr1Url,
-                    asmr1Icon: mix[0].asmr1Icon,
-                    asmr1Volume: mix[0].asmr1Volume,
-
-                    userIdx,
-                };
-                await Playlist.create(newMix);
-                break;
-            }
-            case 2: {
-                console.log('your trying to add ', mix.length);
-                const newMix2 = {
-                    mixTitle: req.body.mixTitle,
-
-                    asmr1Title: mix[0].asmr1Title,
-                    asmr1Url: mix[0].asmr1Url,
-                    asmr1Icon: mix[0].asmr1Icon,
-                    asmr1Volume: mix[0].asmr1Volume,
-
-                    asmr2Title: mix[1].asmr2Title,
-                    asmr2Url: mix[1].asmr2Url,
-                    asmr2Icon: mix[1].asmr2Icon,
-                    asmr2Volume: mix[1].asmr2Volume,
-
-                    userIdx,
-                };
-                await Playlist.create(newMix2);
-                break;
-            }
-            case 3: {
-                console.log('your trying to add ', mix.length);
-                const newMix3 = {
-                    mixTitle: req.body.mixTitle,
-                    asmr1Title: mix[0].asmr1Title,
-                    asmr1Url: mix[0].asmr1Url,
-                    asmr1Icon: mix[0].asmr1Icon,
-                    asmr1Volume: mix[0].asmr1Volume,
-
-                    asmr2Title: mix[1].asmr2Title,
-                    asmr2Url: mix[1].asmr2Url,
-                    asmr2Icon: mix[1].asmr2Icon,
-                    asmr2Volume: mix[1].asmr2Volume,
-
-                    asmr3Title: mix[2].asmr3Title,
-                    asmr3Url: mix[2].asmr3Url,
-                    asmr3Icon: mix[2].asmr3Icon,
-                    asmr3Volume: mix[2].asmr3Volume,
-
-                    userIdx,
-                };
-                await Playlist.create(newMix3);
-                break;
-            }
-            case 4: {
-                console.log('your trying to add ', mix.length);
-                const newMix4 = {
-                    mixTitle: req.body.mixTitle,
-
-                    asmr1Title: mix[0].asmr1Title,
-                    asmr1Url: mix[0].asmr1Url,
-                    asmr1Icon: mix[0].asmr1Icon,
-                    asmr1Volume: mix[0].asmr1Volume,
-
-                    asmr2Title: mix[1].asmr2Title,
-                    asmr2Url: mix[1].asmr2Url,
-                    asmr2Icon: mix[1].asmr2Icon,
-                    asmr2Volume: mix[1].asmr2Volume,
-
-                    asmr3Title: mix[2].asmr3Title,
-                    asmr3Url: mix[2].asmr3Url,
-                    asmr3Icon: mix[2].asmr3Icon,
-                    asmr3Volume: mix[2].asmr3Volume,
-
-                    asmr4Title: mix[3].asmr4Title,
-                    asmr4Url: mix[3].asmr4Url,
-                    asmr4Icon: mix[3].asmr4Icon,
-                    asmr4Volume: mix[3].asmr4Volume,
-
-                    userIdx,
-                };
-                await Playlist.create(newMix4);
-                break;
-            }
-            default:
-                throw new Error(ERROR.INVALID_PARAMS);
-        }
-
-        res.json({ msg: 'success' });
-    } catch (err) {
+        await Playlist.create(newMix)
+        res.status(201).json(newMix)
+    } catch (error) {
         console.log('err', err);
         res.json({ msg: 'fail' });
+
     }
-});
+}
+);
 
 // update playlist
 router.put('/:playlistIdx/users/:userIdx', async (req, res) => {
