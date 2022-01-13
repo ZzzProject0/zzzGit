@@ -58,7 +58,7 @@ const options = {
   // letsencrypt로 받은 인증서 경로를 입력
   ca: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/fullchain.pem"),
   key: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/privkey.pem"),
-  cert: fs.readFileSync("/etc/letsencrypt/livge/www.zzzback.shop/cert.pem"),
+  cert: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/cert.pem"),
 };
 
 app.use("/api", express.urlencoded({ extended: false }), userRouter);
