@@ -51,7 +51,7 @@ webpush.setVapidDetails(
 );
 
 app.get("/", (req, res) => {
-  res.send("Hello Zzz");
+  res.send("Hello ZZZ");
 });
 
 // const options = {
