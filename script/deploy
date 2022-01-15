@@ -1,6 +1,6 @@
 #!/bin/sh
 ssh ubuntu@18.117.86.112<<EOF
-    cd ~/github-folder
+    cd ~/zzzGit
     sudo -s	
     git pull
     curl -o-   https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh    | bash
