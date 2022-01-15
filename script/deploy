@@ -10,7 +10,7 @@ ssh ubuntu@18.117.86.112<<EOF
     npm install
     npm install -g pm2
     pwd
-    cd ~/zzzGit
-    pm2 restart app.js
+    pm2 restart ecosystem.config.js
+    #pm2 restart app.js
     exit
 EOF
