@@ -51,18 +51,14 @@ webpush.setVapidDetails(
 );
 
 app.get("/", (req, res) => {
-  res.send("Hello ZZZ");
+  res.send("Welcome to API server ");
 });
 
 // const options = {
 //   // letsencrypt로 받은 인증서 경로를 입력
 //   ca: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/fullchain.pem"),
 //   key: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/privkey.pem"),
-<<<<<<< HEAD
-//   cert: fs.readFileSync("/etc/letsencrypt/livge/www.zzzback.shop/cert.pem"),
-=======
 //   cert: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/cert.pem"),
->>>>>>> e06e717ba0efc15354dce5f38dd220480bf51618
 // };
 
 app.use("/api", express.urlencoded({ extended: false }), userRouter);
@@ -84,7 +80,4 @@ app.use("/api", express.urlencoded({ extended: false }), pushRouter);
 app.listen(port, () => {
   console.log(`listening at http://18.117.86.112:${port}`);
 });
-<<<<<<< HEAD
-=======
 module.exports = app;
->>>>>>> e06e717ba0efc15354dce5f38dd220480bf51618
