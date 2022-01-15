@@ -5,7 +5,8 @@ const autoIncrement = require('mongoose-auto-increment');
 require('dotenv').config();
 
 const dev1 = process.env.DEV;
-const connection = mongoose.createConnection(dev1);
+const production = process.env.PRODUCTION;
+const connection = mongoose.createConnection(production);
 autoIncrement.initialize(connection);
 
 const playlistsSchema = new Schema(
