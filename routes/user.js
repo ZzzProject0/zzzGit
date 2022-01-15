@@ -142,12 +142,12 @@ router.get("/me", authMiddleware, async (req, res) => {
 router.post("/kakaoLogin", async (req, res) => {
   try {
     const { id } = req.body;
-    const { token } = req.body;
     const userId = id;
     const user = await User.findOne({ userId: userId }).exec();
     if (user) {
       let loginCnt = user.loginCnt + 1;
       await User.updateOne({ userId }, { $set: { loginCnt } });
+      let token = jwt.sign({ userIdx: user.userIdx }, "my-secret-key");
 
       const userInfo = {
         userIdx: user.userIdx,
@@ -183,6 +183,7 @@ router.post("/kakaoLogin", async (req, res) => {
         loginCnt,
         noticeSet,
       });
+      let token = jwt.sign({ userIdx: user.userIdx }, "my-secret-key");
 
       const userInfo = {
         userIdx: newUser.userIdx,
