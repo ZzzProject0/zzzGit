@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const webpush = require("web-push");
-const admin = require("firebase-admin");
+const admin = require("../admin");
 // const serverKey ="AAAA7XUdSMQ:APA91bHiG3ONselw3DtnFO6-7Z2hPZq_qh9zQihBUnkrpebWvTNvSv1J8d5jQI4RgH3b7wXXlwQoQSTytd_lvwnFBeVkyV3-ShUa0HL_mpmcuBckF5bLlxhDertxC8YsONjZVntYrCk2";
 
 router.post("/notifications/subscribe", async (req, res) => {
