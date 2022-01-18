@@ -54,12 +54,12 @@ app.get("/", (req, res) => {
   res.send("Welcome to API server start");
 });
 
-const options = {
-  // letsencrypt로 받은 인증서 경로를 입력
-  ca: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/fullchain.pem"),
-  key: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/privkey.pem"),
-  cert: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/cert.pem"),
-};
+// const options = {
+//   // letsencrypt로 받은 인증서 경로를 입력
+//   ca: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/fullchain.pem"),
+//   key: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/privkey.pem"),
+//   cert: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/cert.pem"),
+// };
 
 app.use("/api", express.urlencoded({ extended: false }), userRouter);
 app.use("/api", express.urlencoded({ extended: false }), noticeRouter);
@@ -74,11 +74,12 @@ app.use(
 app.use("/auth", express.urlencoded({ extended: false }), authRouter);
 app.use("/api", express.urlencoded({ extended: false }), pushRouter);
 
-http.createServer(app).listen(port);
-https.createServer(options, app).listen(443);
+// 18.117.86.112
+// http.createServer(app).listen(port);
+// https.createServer(options, app).listen(443);
 
-// app.listen(port, () => {
-//   console.log(`listening at http://18.117.86.112:${port}`);
-// });
+app.listen(port, () => {
+  console.log(`listening at http://localhost:${port}`);
+});
 
 module.exports = app;
