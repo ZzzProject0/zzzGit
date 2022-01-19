@@ -33,7 +33,7 @@ connect();
 
 app.use(morgan("combined"));
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(
   session({
@@ -51,7 +51,11 @@ webpush.setVapidDetails(
 );
 
 app.get("/", (req, res) => {
+<<<<<<< HEAD
   res.send("Welcome to API server try 7 fucker !! ");
+=======
+  res.send("Welcome to API server start");
+>>>>>>> 78ec903f75f9d46d0b424ca51796f5c9ca40e754
 });
 
 // const options = {
@@ -74,10 +78,12 @@ app.use(
 app.use("/auth", express.urlencoded({ extended: false }), authRouter);
 app.use("/api", express.urlencoded({ extended: false }), pushRouter);
 
+// 18.117.86.112
 // http.createServer(app).listen(port);
 // https.createServer(options, app).listen(443);
 
 app.listen(port, () => {
-  console.log(`listening at http://18.117.86.112:${port}`);
+  console.log(`listening at http://localhost:${port}`);
 });
+
 module.exports = app;
