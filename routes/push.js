@@ -1,30 +1,32 @@
-const express = require("express");
-const router = express.Router();
-const webpush = require("web-push");
-const admin = require("firebase-admin");
-const firebase = require("firebase/compat/app");
-const authMiddleware = require("../middlewares/auth-middleware");
-const schedule = require('node-schedule');
+// const express = require("express");
+// const router = express.Router();
+// const webpush = require("web-push");
+// const admin = require("firebase-admin");
+// const firebase = require("firebase/compat/app");
+// const authMiddleware = require("../middlewares/auth-middleware");
+// const schedule = require("node-schedule");
+// const User = require("../schemas/users");
+// const Notice = require("../schemas/notice");
 
-router.post("/notifications/subscribe", async (req, res) => {
-  console.log(req.body);
-  const payload = JSON.stringify({
-    title: req.body.title,
-    description: req.body.description,
-    icon: req.body.icon,
-  });
-  console.log(req.body.subscription);
-  webpush
-    .sendNotification(req.body.subscription, payload)
-    .then((result) => console.log())
-    .catch((e) => console.log(e.stack));
-  res.status(200).json({ success: true });
-});
+// router.post("/notifications/subscribe", async (req, res) => {
+//   console.log(req.body);
+//   const payload = JSON.stringify({
+//     title: req.body.title,
+//     description: req.body.description,
+//     icon: req.body.icon,
+//   });
+//   console.log(req.body.subscription);
+//   webpush
+//     .sendNotification(req.body.subscription, payload)
+//     .then((result) => console.log())
+//     .catch((e) => console.log(e.stack));
+//   res.status(200).json({ success: true });
+// });
 
-var serviceAccount = require("../passport/pushnotificationtest-9e21c-firebase-adminsdk-ebja8-88145a1da6.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+// var serviceAccount = require("../passport/pushnotificationtest-9e21c-firebase-adminsdk-ebja8-88145a1da6.json");
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+// });
 
 // body로 받아야하기 때문에 post인지 get인지 고민
 // /notice/:registrationToken/users/:userIdx
@@ -35,10 +37,10 @@ admin.initializeApp({
 
 // exports.scheduleSampleJob = functions.https.onRequest((req , res) => {
 //     /*
-//         Say you very specifically want a function to execute at 5:30am on December 
+//         Say you very specifically want a function to execute at 5:30am on December
 //         21, 2012. Remember - in JavaScript - 0 - January, 11 - December.
 //     */
-//     var date = new Date(2012, 11, 21, 5, 30, 0);  
+//     var date = new Date(2012, 11, 21, 5, 30, 0);
 
 //     var j = schedule.scheduleJob(date, function(){
 //         console.log('The Task is executed');
@@ -48,45 +50,80 @@ admin.initializeApp({
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
-router.get("/test/:a")
+// noticeSet === true User만 받기
 
-router.get("/location/:registrationToken", authMiddleware, async (req, res) => {
-  const { registrationToken } = req.params;
-  // const { userIdx } = req.params;  
-  console.log("token : ", registrationToken);
+// 1. 등록&수정시 알람 자동설정
+// 2. 수정 - noticeSet = false 스케줄 취소
+// 3. 수정 - nosticsSet = true 스케줄 변경
 
-  var j = schedule.scheduleJob('0 27 15 * * *', async () => {
-    const message = {
-      data: { time: "1:53" },
-      notification: {
-        title: "푸시알림 테스트",
-        body: "푸시알림 테스트입니다.",
-      },
-      token: registrationToken,
-    };
-    console.log("1")
-    try {
-      console.log("2")
+// router.get(
+//   "/notice/:registrationToken/users/:userIdx",
+//   authMiddleware,
+//   async (req, res) => {
+//     const { registrationToken } = req.params;
+//     const { userIdx } = req.params;
+//     console.log("token : ", registrationToken);
+//     console.log("userIdx : ", userIdx);
+//     // 초, 분, 시, 일, 월, 년 > 간격 X 때마다 O
+//     const list = await Notice.find(
+//       { userIdx },
+//       { _id: 0, timePA: 1, hour: 1, min: 1 }
+//     );
+//     console.log("list : ", list); // [ { timePA: 'PM', hour: 2, min: 23 } ]
 
-      await admin
-        .messaging()
-        .send(message)
-        // .then((response) => {
-        //   // Response is a message ID string.
-        //   console.log("Successfully sent message:", response);
-        //   //res.status(200).send(response);
-        // })
-        .catch((error) => {
-          console.log("Error sending message:", error);
-        });
+//     const listObj = { list };
+//     const timeList = new Array();
+//     const hourList = new Array();
+//     const minList = new Array();
+//     for (let a = 0; a < listObj.list.length; a++) {
+//       timeList.push(listObj.list[a].timePA);
+//       hourList.push(listObj.list[a].hour);
+//       minList.push(listObj.list[a].min);
+//     }
 
-    } catch (error) {
-      res.status(400).send({
-        errorMessage: "알람 등록 중 오류 발생",
-      });
-    }
+//     // [ 'PM', 2, 23 ]
+//     let time = timeList.toString();
+//     let hour = Number(hourList.toString());
+//     let min = Number(minList.toString());
+//     console.log("time, hour, min : ", time, hour, min); // PM,2,23
 
-  })
-  res.status(200).send("successful")
-})
+//     time.indexOf("PM") === 0 ? (hour = hour + 12) : hour;
+//     console.log("hour : ", hour); // 14
+
+//     let pushSet = "0 " + min + " " + hour + " * * *";
+//     console.log("pushSet : ", pushSet); // 0 23 14 * * *
+
+//     var j = schedule.scheduleJob(pushSet, async () => {
+//       const message = {
+//         // data: { time: "1:53" },
+//         notification: {
+//           title: "푸시알림 테스트",
+//           body: "푸시알림 테스트입니다.",
+//         },
+//         token: registrationToken,
+//       };
+//       console.log("11111111111111111111");
+//       try {
+//         console.log("22222222222222222222");
+
+//         await admin
+//           .messaging()
+//           .send(message)
+//           // .then((response) => {
+//           //   // Response is a message ID string.
+//           //   console.log("Successfully sent message:", response);
+//           //   //res.status(200).send(response);
+//           // })
+//           .catch((error) => {
+//             console.log("Error sending message:", error);
+//           });
+//       } catch (error) {
+//         res.status(400).send({
+//           errorMessage: "알람 등록 중 오류 발생",
+//         });
+//       }
+//     });
+//     res.status(200).send("successful");
+//   }
+// );
 module.exports = router;

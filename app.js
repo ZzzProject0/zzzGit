@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const passportConfig = require("./passport");
-const webpush = require("web-push");
+// const webpush = require("web-push");
 const cors = require("cors");
 
 const app = express();
@@ -23,14 +23,15 @@ const noticeRouter = require("./routes/notice");
 const diaryRouter = require("./routes/diary");
 const asmrRouter = require("./routes/asmr");
 const playlistRouter = require("./routes/playlist");
-const authRouter = require("./routes/auth");
 const scoresRouter = require("./routes/score");
-const pushRouter = require("./routes/push");
+// const authRouter = require("./routes/auth");
+// const pushRouter = require("./routes/push");
 
 const connect = require("./schemas");
 
 connect();
 
+// app.use(morgan("dev"));
 app.use(morgan("combined"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -44,11 +45,11 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-webpush.setVapidDetails(
-  "mailto: www.zzzapp.co.kr",
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
-);
+// webpush.setVapidDetails(
+//   "mailto: www.zzzapp.co.kr",
+//   process.env.VAPID_PUBLIC_KEY,
+//   process.env.VAPID_PRIVATE_KEY
+// );
 
 app.get("/", (req, res) => {
   res.send("Welcome to API server start");
@@ -71,8 +72,8 @@ app.use(
   express.urlencoded({ extended: false }),
   playlistRouter
 );
-app.use("/auth", express.urlencoded({ extended: false }), authRouter);
-app.use("/api", express.urlencoded({ extended: false }), pushRouter);
+// app.use("/auth", express.urlencoded({ extended: false }), authRouter);
+// app.use("/api", express.urlencoded({ extended: false }), pushRouter);
 
 // 18.117.86.112
 // http.createServer(app).listen(port);
