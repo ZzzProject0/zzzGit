@@ -51,11 +51,7 @@ webpush.setVapidDetails(
 );
 
 app.get("/", (req, res) => {
-<<<<<<< HEAD
-  res.send("Welcome to API server try 7 fucker !! ");
-=======
   res.send("Welcome to API server start");
->>>>>>> 78ec903f75f9d46d0b424ca51796f5c9ca40e754
 });
 
 // const options = {

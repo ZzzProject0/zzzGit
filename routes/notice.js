@@ -33,6 +33,11 @@ router.post("/notice", authMiddleware, async (req, res) => {
       createdAt,
     });
     await User.updateOne({ userIdx }, { $set: { noticeSet: true } });
+
+    //
+    //  push alarm? 
+    //
+
     res.status(201).send({
       result: "알람 설정 완료",
     });
