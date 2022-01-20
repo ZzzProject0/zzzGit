@@ -1,16 +1,31 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const passportConfig = require("./passport");
-// const webpush = require("web-push");
 const cors = require("cors");
-
+let whitelist = [
+  "https://www.zzzback.shop",
+  "http://www.zzzback.shop",
+  "https://www.zzzapp.co.kr",
+  "http://www.zzzapp.co.kr",
+  "http://localhost:3000",
+  "https://zzzapp.co.kr",
+  "https://push-e53ad.web.app",
+];
+// whitelist들을 비동기로 처리하는 option 설정
+let corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  Credential: true,
+};
 const app = express();
-app.use(cors());
-passportConfig();
+app.use(cors(corsOptions));
 
 const http = require("http");
 const https = require("https");
-const passport = require("passport");
 const session = require("express-session");
 const port = 3000;
 const path = require("path");
@@ -24,8 +39,6 @@ const diaryRouter = require("./routes/diary");
 const asmrRouter = require("./routes/asmr");
 const playlistRouter = require("./routes/playlist");
 const scoresRouter = require("./routes/score");
-// const authRouter = require("./routes/auth");
-// const pushRouter = require("./routes/push");
 
 const connect = require("./schemas");
 
@@ -43,8 +56,8 @@ app.use(
     saveUninitialized: true,
   })
 );
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 // webpush.setVapidDetails(
 //   "mailto: www.zzzapp.co.kr",
 //   process.env.VAPID_PUBLIC_KEY,
@@ -52,15 +65,15 @@ app.use(passport.session());
 // );
 
 app.get("/", (req, res) => {
-  res.send("Welcome to API server start");
+  res.send("Welcome to Zzz API server");
 });
 
-// const options = {
-//   // letsencrypt로 받은 인증서 경로를 입력
-//   ca: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/fullchain.pem"),
-//   key: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/privkey.pem"),
-//   cert: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/cert.pem"),
-// };
+const options = {
+  // letsencrypt로 받은 인증서 경로를 입력
+  ca: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/fullchain.pem"),
+  key: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/privkey.pem"),
+  cert: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/cert.pem"),
+};
 
 app.use("/api", express.urlencoded({ extended: false }), userRouter);
 app.use("/api", express.urlencoded({ extended: false }), noticeRouter);
@@ -72,15 +85,13 @@ app.use(
   express.urlencoded({ extended: false }),
   playlistRouter
 );
-// app.use("/auth", express.urlencoded({ extended: false }), authRouter);
-// app.use("/api", express.urlencoded({ extended: false }), pushRouter);
 
 // 18.117.86.112
-// http.createServer(app).listen(port);
-// https.createServer(options, app).listen(443);
+http.createServer(app).listen(port);
+https.createServer(options, app).listen(443);
 
-app.listen(port, () => {
-  console.log(`listening at http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`listening at http://localhost:${port}`);
+// });
 
 module.exports = app;

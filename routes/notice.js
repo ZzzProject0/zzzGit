@@ -9,7 +9,7 @@ const admin = require("firebase-admin");
 const firebase = require("firebase/compat/app");
 const schedule = require("node-schedule");
 
-var serviceAccount = require("../passport/pushnotificationtest-9e21c-firebase-adminsdk-ebja8-88145a1da6.json");
+var serviceAccount = require("../config/pushnotificationtest-9e21c-firebase-adminsdk-ebja8-88145a1da6.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
@@ -19,7 +19,7 @@ router.post("/notice", authMiddleware, async (req, res) => {
   const { sleepChk, timePA, hour, min, pushToken } = req.body;
   const { user } = res.locals;
   const { userIdx } = user;
-
+  // console.log("pushToken1 : ", pushToken);
   try {
     const recentNotice = await Notice.find().sort("-noticeIdx").limit(1);
     let noticeIdx = 1;
@@ -42,19 +42,22 @@ router.post("/notice", authMiddleware, async (req, res) => {
       createdAt,
     });
     await User.updateOne({ userIdx }, { $set: { noticeSet: true } });
-    console.log("DB create OK");
-    //  push alarm?
+    // console.log("DB create OK");
+
     let newH = 0;
     timePA === "PM" ? (newH = hour + 12) : (newH = hour);
+    let pushSet = "0 " + min + " " + newH + " * * *";
 
     let idx = String(userIdx);
 
-    let pushSet = "0 " + min + " " + newH + " * * *";
     if (sleepChk === false) {
-      schedule.cancelJob(userIdx);
+      schedule.cancelJob(idx);
+      // console.log("sleepChk false");
     } else {
-      let job1 = schedule.scheduleJob(idx, pushSet, async () => {
-        console.log("pushToken : ", pushToken);
+      schedule.cancelJob(idx);
+      // console.log("sleepChk true");
+      let j = schedule.scheduleJob(idx, pushSet, async () => {
+        // console.log("pushToken2 : ", pushToken);
         const message = {
           notification: {
             title: "Zzz 알림",
@@ -62,9 +65,9 @@ router.post("/notice", authMiddleware, async (req, res) => {
           },
           token: pushToken,
         };
-        console.log("post 1");
+        // console.log("post 1");
         try {
-          console.log("post 2 try");
+          // console.log("post 2 try");
           await admin
             .messaging()
             .send(message)
@@ -132,7 +135,7 @@ router.put("/notice/users/:userIdx", authMiddleware, async (req, res) => {
   const noticeUser = await Notice.findOne({ userIdx }); // param으로 notice.userIdx
   const tokenUser = user.userIdx;
   const dbUser = noticeUser.userIdx;
-
+  // console.log("pushToken1 : ", pushToken);
   try {
     if (tokenUser === dbUser) {
       await Notice.updateOne(
@@ -146,21 +149,21 @@ router.put("/notice/users/:userIdx", authMiddleware, async (req, res) => {
           },
         }
       );
-      console.log("DB update OK");
+      // console.log("DB update OK");
       //  push alarm?
       let newH = 0;
       timePA === "PM" ? (newH = hour + 12) : (newH = hour);
-
-      // 19일 16:23 -> 1:23
       let pushSet = "0 " + min + " " + newH + " * * *";
+
       if (sleepChk === false) {
         schedule.cancelJob(userIdx);
+        // console.log("sleepChk false");
       } else {
-        // schedule.gracefulShutdown();
+        // schedule.gracefulShutdown(); // 강제 종료
         schedule.cancelJob(userIdx);
-
-        let job2 = schedule.scheduleJob(userIdx, pushSet, async () => {
-          console.log("pushToken : ", pushToken);
+        // console.log("sleepChk true");
+        let j = schedule.scheduleJob(userIdx, pushSet, async () => {
+          // console.log("pushToken2 : ", pushToken);
           const message = {
             notification: {
               title: "Zzz 알림",
@@ -168,9 +171,9 @@ router.put("/notice/users/:userIdx", authMiddleware, async (req, res) => {
             },
             token: pushToken,
           };
-          console.log("put 1");
+          // console.log("put 1");
           try {
-            console.log("put 2 try");
+            // console.log("put 2 try");
             await admin
               .messaging()
               .send(message)
@@ -184,14 +187,6 @@ router.put("/notice/users/:userIdx", authMiddleware, async (req, res) => {
           }
         });
       }
-
-      // var job = schedule.scheduledJobs[userIdx];
-      // console.log(job.name);
-      // // job.cancel();
-      // var list = new Array();
-      // list.push(job.name);
-      // console.log(list);
-
       res.status(201).send({
         result: "알람 정보 수정 완료",
       });
