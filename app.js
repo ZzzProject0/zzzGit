@@ -9,6 +9,9 @@ let whitelist = [
   "http://localhost:3000",
   "https://zzzapp.co.kr",
   "https://push-e53ad.web.app",
+  "https://zzz-pwa.web.app",
+  "https://zzz-pwa.firebaseapp.com",
+  "https://pushnotificationtest-9e21c.firebaseapp.com",
 ];
 // whitelist들을 비동기로 처리하는 option 설정
 let corsOptions = {
