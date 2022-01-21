@@ -5,7 +5,10 @@ const User = require("../schemas/users");
 const bcrypt = require("bcrypt");
 const authMiddleware = require("../middlewares/auth-middleware");
 const Joi = require("joi");
+const dotenv = require("dotenv");
 
+dotenv.config();
+const jwtKey = process.env.JWT_TOKEN;
 // 회원가입 검증
 const registerSchema = Joi.object({
   userId: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{5,10}$")).required(),
@@ -94,7 +97,7 @@ router.post("/login", async (req, res) => {
     const authenticate = await bcrypt.compare(password, user.hashedPassword);
 
     if (authenticate === true) {
-      const token = jwt.sign({ userIdx: user.userIdx }, "my-secret-key");
+      const token = jwt.sign({ userIdx: user.userIdx }, jwtKey);
       // 0이면 1 생성 아니면 +1 업데이트
       let loginCnt = user.loginCnt + 1;
       await User.updateOne({ userId }, { $set: { loginCnt } });
@@ -131,36 +134,12 @@ router.get("/me", authMiddleware, async (req, res) => {
   });
 });
 
-// id = req.body String
-// token = req.body String?
-// 1. access token 사용  2. jwt 생성하여 사용
-// 로그인
-// id 존재하면 {userIdx, userId, loginCnt, noticeSet, token}
-// 회원가입 > 로그인
-// id 존재하지 않으면 생성하여 {userIdx, userId, loginCnt, noticeSet, token} 출력
-// 카카오 로그인
 router.post("/kakaoLogin", async (req, res) => {
   try {
     const { id } = req.body;
     const userId = id;
-    const user = await User.findOne({ userId: userId }).exec();
-    if (user) {
-      let loginCnt = user.loginCnt + 1;
-      await User.updateOne({ userId }, { $set: { loginCnt } });
-      let token = jwt.sign({ userIdx: user.userIdx }, "my-secret-key");
-
-      const userInfo = {
-        userIdx: user.userIdx,
-        userId: user.userId,
-        noticeSet: user.noticeSet,
-        loginCnt,
-        token,
-      };
-      res.status(200).send({
-        userInfo,
-      });
-      return;
-    } else {
+    let user = await User.findOne({ userId }).exec();
+    if (!user) {
       const recentUser = await User.find().sort("-userIdx").limit(1);
       let userIdx = 1;
       if (recentUser.length != 0) {
@@ -176,27 +155,33 @@ router.post("/kakaoLogin", async (req, res) => {
         .replace("T", " ")
         .replace(/\..*/, "");
 
-      const newUser = await User.create({
+      await User.create({
         userIdx,
         userId,
         createdAt,
         loginCnt,
         noticeSet,
       });
-      let token = jwt.sign({ userIdx: user.userIdx }, "my-secret-key");
-
-      const userInfo = {
-        userIdx: newUser.userIdx,
-        userId: newUser.userId,
-        loginCnt: newUser.loginCnt,
-        noticeSet: newUser.noticeSet,
-        token,
-      };
-      res.status(200).send({
-        userInfo,
-      });
-      return;
     }
+    let userDb = await User.findOne({ userId }).exec();
+
+    let loginCnt = userDb.loginCnt + 1;
+    await User.updateOne({ userId }, { $set: { loginCnt } });
+
+    let token = jwt.sign({ userIdx: userDb.userIdx }, jwtKey);
+
+    const userInfo = {
+      userIdx: userDb.userIdx,
+      userId: userDb.userId,
+      loginCnt: userDb.loginCnt,
+      noticeSet: userDb.noticeSet,
+      token,
+    };
+
+    res.status(200).send({
+      userInfo,
+    });
+    return;
   } catch (err) {
     res.status(400).send({
       errorMessage: "입력한 내용을 다시 확인해주세요",
