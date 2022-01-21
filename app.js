@@ -69,7 +69,7 @@ app.use(
 // );
 
 app.get("/", (req, res) => {
-  res.send("Welcome to Zzz API server test 7");
+  res.send("Welcome to Zzz API server test 8");
 });
 
 // const options = {
