@@ -242,10 +242,10 @@ celerybeat.pid
 *.sage.py
 
 # Environments
- .env
-.env/
+#  .env
+# .env/
 .venv/
-env/
+# env/
 venv/
 ENV/
 env.bak/
@@ -304,6 +304,6 @@ pip-selfcheck.json
 *.config.json
 
 node_modules
-.env
+# .env
 
-.env
+# .env
