@@ -33,7 +33,20 @@ router.post("/diaries", authMiddleware, async (req, res) => {
       .replace(/\..*/, "");
     const scoreAvg = feelScore + sleepScore;
 
-    await Diary.create({
+    // await Diary.create({
+    //   diaryIdx,
+    //   userIdx,
+    //   yearMonth,
+    //   day,
+    //   feelScore,
+    //   sleepScore,
+    //   comment,
+    //   createdAt,
+    //   inputDate,
+    //   scoreAvg,
+    // });
+
+    const userInfo = await Diary.create({
       diaryIdx,
       userIdx,
       yearMonth,
@@ -45,12 +58,31 @@ router.post("/diaries", authMiddleware, async (req, res) => {
       inputDate,
       scoreAvg,
     });
+
+    // const getDiary = await Diary.find(
+    //   { userIdx, yearMonth, day },
+    //   {
+    //     _id: 0,
+    //     diaryIdx: 1,
+    //     yearMonth: 1,
+    //     day: 1,
+    //     feelScore: 1,
+    //     sleepScore: 1,
+    //     comment: 1,
+    //   }
+    // ).sort("day");
     res.status(201).send({
-      result: "수면 기록 등록 완료",
+      diaryIdx,
+      yearMonth,
+      day,
+      feelScore,
+      sleepScore,
+      comment,
+      userIdx,
     });
     return;
   } catch (error) {
-    res.status(400).send({
+    res.status(400).json({
       errorMessage: "수면 기록 등록 중 오류 발생",
     });
   }
