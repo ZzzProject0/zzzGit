@@ -160,7 +160,16 @@ router.put("/notice/users/:userIdx", authMiddleware, async (req, res) => {
       // console.log("DB update OK");
       //  push alarm?
       let newH = 0;
-      timePA === "PM" ? (newH = hour + 12) : (newH = hour);
+
+      // timePA === "PM" ? (newH = hour + 12) : (newH = hour);
+      if (timePA === "PM" && hour === 12) {
+        newH = hour;
+      } else if (timePA === "PM") {
+        newH = hour + 12;
+      } else {
+        newH = hour;
+      }
+
       let pushSet = "0 " + min + " " + newH + " * * *";
 
       if (sleepChk === false) {
