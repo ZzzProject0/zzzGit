@@ -46,7 +46,7 @@ router.post("/diaries", authMiddleware, async (req, res) => {
     //   scoreAvg,
     // });
 
-    const userInfo = await Diary.create({
+    await Diary.create({
       diaryIdx,
       userIdx,
       yearMonth,
@@ -73,12 +73,10 @@ router.post("/diaries", authMiddleware, async (req, res) => {
     // ).sort("day");
     res.status(201).send({
       diaryIdx,
-      yearMonth,
       day,
       feelScore,
       sleepScore,
       comment,
-      userIdx,
     });
     return;
   } catch (error) {
