@@ -9,19 +9,19 @@ router.get("/scores/users/:userIdx", authMiddleware, async (req, res) => {
   const { userIdx } = req.params;
   const { user } = res.locals;
   try {
-    const arrIdx = [parseInt(userIdx)]; // Diary schema에 DB 존재하는지 파악
+    // const arrIdx = [parseInt(userIdx)]; // Diary schema에 DB 존재하는지 파악
     const userIdxDb = await Diary.find(
       { userIdx },
       { _id: 0, userIdx: 1 }
     ).exec();
-    const userIdxDbobj = { userIdxDb };
+    // console.log(userIdxDb);
     const arrIdxDb = new Array();
-    for (let z = 0; z < userIdxDbobj.userIdxDb.length; z++) {
-      arrIdxDb.push(parseInt(userIdxDbobj.userIdxDb[z].userIdx));
+    for (let z = 0; z < { userIdxDb }.userIdxDb.length; z++) {
+      arrIdxDb.push(parseInt({ userIdxDb }.userIdxDb[z].userIdx));
     }
-    const intersectionIdx = arrIdxDb.filter((x) => arrIdx.includes(x));
-
-    if (intersectionIdx.length === 0) {
+    // const intersectionIdx = arrIdxDb.filter((x) => arrIdx.includes(x));
+    // console.log("intersectionIdx", intersectionIdx);
+    if (arrIdxDb.length === 0) {
       res.status(206).send({
         errorMessage: "기록 없는 유저",
       });
@@ -42,27 +42,39 @@ router.get("/scores/users/:userIdx", authMiddleware, async (req, res) => {
           scoreAvg: 1,
           inputDate: 1,
         }
-      ).sort("day"); // [{ yearMonth: '2022-1', day: 1, sleepScore: 4 }]
-      const scoreObj = { monthDiary }; // {monthDiary: [{ yearMonth: '2022-1', day: 1, sleepScore: 4 }]}
+      ).sort("inputDate"); // [{ yearMonth: '2022-1', day: 1, sleepScore: 4 }]
+      // const scoreObj = { monthDiary }; // {monthDiary: [{ yearMonth: '2022-1', day: 1, sleepScore: 4 }]}
 
       const nowDate = new Date(+new Date() + 3240 * 10000); // 현재 날짜 yyyymmdd
-      const nowDateForm = moment(nowDate).format("YYYY-MM-DD"); // 2022-01-03
+      // const nowDateForm = moment(nowDate).format("YYYY-MM-DD"); // 2022-01-03
       const nowDay = nowDate.getDay(); // 현재 요일 받기 1
+      // console.log("nowDay", nowDay);
 
       function zero(nowDay) {
         let result = "";
         const arrDbDate = new Array(); // DB중 day 배열에 넣기
-        for (let a = 0; a < scoreObj.monthDiary.length; a++) {
-          arrDbDate.push(scoreObj.monthDiary[a].inputDate);
+        for (let a = 0; a < { monthDiary }.monthDiary.length; a++) {
+          arrDbDate.push({ monthDiary }.monthDiary[a].inputDate);
         }
-        // console.log(arrDbDate);
+        // console.log("arrDbDate", arrDbDate);
 
         // 이번주
-        const thisMonDd = nowDate.getDate() - nowDay + 1; // 이번주 월요일의 날짜
+        // const thisMonDd = nowDate.getDate() - nowDay + 1; // 이번주 월요일의 날짜
+        let thisMonDd = 0;
+        if (nowDay === 0) {
+          thisMonDd = nowDate.getDate() - 6;
+        } else {
+          thisMonDd = nowDate.getDate() - nowDay + 1;
+        }
         const nowDdForm = Number(moment().format("DD")); // 현재 날짜
         const thisBetween = nowDdForm - thisMonDd;
         const thisMonDate = new Date(+new Date() + 3240 * 10000);
-        thisMonDate.setDate(thisMonDate.getDate() - nowDay + 1); // 2022-01-03 Date 형식
+        if (nowDay === 0) {
+          thisMonDate.setDate(thisMonDate.getDate() - 6);
+        } else {
+          thisMonDate.setDate(thisMonDate.getDate() - nowDay + 1);
+        }
+        // thisMonDate.setDate(thisMonDate.getDate() - nowDay + 1); // 2022-01-03 Date 형식
         const thisMonDateForm = moment(thisMonDate).format("YYYY-MM-DD"); // 이번주 월요일 YYYY-MM-DD 형식 변환
 
         const arrThisWeek = new Array(); // 이번주 월요일부터 현재 arr에 담기
@@ -72,10 +84,10 @@ router.get("/scores/users/:userIdx", authMiddleware, async (req, res) => {
             .format("YYYY-MM-DD");
           arrThisWeek.push(bThis);
         }
-        // console.log(arrThisWeek);
+        // console.log("arrThisWeek", arrThisWeek);
 
         const thisWeekDb = arrThisWeek.filter((x) => arrDbDate.includes(x)); // 이번주 기록 dd 찾기(교집합)
-        // console.log(thisWeekDb);
+        // console.log("thisWeekDb", thisWeekDb);
 
         if (thisWeekDb.length === 0) {
           result += "이번주 기록이 없어요 8ㅅ8";
@@ -114,7 +126,9 @@ router.get("/scores/users/:userIdx", authMiddleware, async (req, res) => {
               (sum, currVale) => sum + currVale,
               0
             );
-            const thisAvg = (thisPicScore / arrThisScore.length).toFixed(1); // this 누적 평균
+            const thisAvg = Number(
+              (thisPicScore / arrThisScore.length).toFixed(1)
+            ); // this 누적 평균
             // console.log(thisAvg); 4.0
             const arrLastScore = new Array(); // last dd 해당하는 score 가져와 배열에 담기
             for (const e of lastWeekDb) {
@@ -131,7 +145,9 @@ router.get("/scores/users/:userIdx", authMiddleware, async (req, res) => {
               (sum, currVale) => sum + currVale,
               0
             );
-            const lastAvg = (lastPicScore / arrLastScore.length).toFixed(1); // last 누적 평균
+            const lastAvg = Number(
+              (lastPicScore / arrLastScore.length).toFixed(1)
+            ); // last 누적 평균
             // console.log(lastAvg); 3.8
 
             //  4/2 = 2배, *100 = 200% || *100 -100 = 100%
