@@ -10,7 +10,7 @@ const connect = () => {
   // PRODUCTION = "mongodb://test:test@54.180.109.58:27017"
   // DEV = "mongodb://localhost/hanghae4"
   mongoose
-    .connect(production1, {
+    .connect(production, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })

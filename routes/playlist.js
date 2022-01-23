@@ -14,9 +14,9 @@ router.get("/users/:userIdx", async (req, res) => {
     if (!target) {
       throw new Error(ERROR.NO_EXISTS_DATA);
     }
-    console.log(target);
-    console.log(target.mixTitle);
-    console.log(target.mixList);
+    // console.log(target);
+    // console.log(target.mixTitle);
+    // console.log(target.mixList);
 
     let mix = [];
     for (let i = 0; i < target.length; i++) {
@@ -31,7 +31,7 @@ router.get("/users/:userIdx", async (req, res) => {
       });
     }
 
-    console.log(mix);
+    // console.log(mix);
 
     res.status(201).json(mix);
   } catch (err) {
@@ -48,14 +48,14 @@ router.post("/", authMiddleware, async (req, res) => {
   const { mixTitle, mixList } = req.body;
 
   try {
-    console.log(mixTitle, mixList);
+    // console.log(mixTitle, mixList);
     // const newMix = {
     //     mixTitle,
     //     mixList,
     //     userIdx,
     // };
 
-    let item = await Playlist.create({ mixTitle, mixList, userIdx });
+    await Playlist.create({ mixTitle, mixList, userIdx });
 
     // post에 send data
     let mix = await Playlist.find(
@@ -82,14 +82,14 @@ router.post("/", authMiddleware, async (req, res) => {
 router.put("/:playlistIdx/users/:userIdx", async (req, res) => {
   const { playlistIdx, userIdx } = req.params;
   const newMixTitle = req.body.mixTitle;
-  console.log("updating playlist ");
+  // console.log("updating playlist ");
   try {
     const target = await Playlist.findOne({ mixIdx: playlistIdx });
     if (!target) {
       throw new Error(ERROR.NO_EXISTS_DATA);
     }
-    console.log(target);
-    console.log(newMixTitle);
+    // console.log(target);
+    // console.log(newMixTitle);
     const updateItem = await Playlist.findOneAndUpdate(
       { mixIdx: playlistIdx },
       { mixTitle: newMixTitle }
