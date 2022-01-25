@@ -56,22 +56,29 @@ router.post("/", authMiddleware, async (req, res) => {
     // };
 
     await Playlist.create({ mixTitle, mixList, userIdx });
-
+    // playListIdx = mixIdx, mixTitle, mixList
     // post에 send data
-    let mix = await Playlist.find(
-      { userIdx },
-      {
-        _id: 0,
-        mixIdx: 1,
-        mixTitle: 1,
-        mixList: 1,
-        userIdx: 1,
-      }
-    )
-      .sort("-mixIdx")
-      .limit(1);
+    // let mix = await Playlist.find(
+    //   { userIdx },
+    //   {
+    //     _id: 0,
+    //     mixIdx: 1,
+    //     mixTitle: 1,
+    //     mixList: 1,
+    //     userIdx: 1,
+    //   }
+    // )
+    //   .sort("-mixIdx")
+    //   .limit(1);
 
-    res.status(201).json(mix);
+    let mix = await Playlist.findOne({ userIdx }).exec();
+
+    let newMix = {
+      playListIdx: mix.mixIdx,
+      mixTitle: mix.mixTitle,
+      mixList: mix.mixList,
+    };
+    res.status(201).json(newMix);
   } catch (error) {
     console.log("err", error);
     res.json({ msg: "fail", error });
