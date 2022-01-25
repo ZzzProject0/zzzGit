@@ -43,10 +43,10 @@ router.get("/users/:userIdx", async (req, res) => {
 // Create a playlist
 router.post("/", authMiddleware, async (req, res) => {
   const { userIdx } = res.locals.user;
-
-  console.log("creating new playlist");
+  // console.log("userIdx : ", userIdx);
+  // console.log("creating new playlist");
   const { mixTitle, mixList } = req.body;
-
+  // console.log("body : ", mixTitle, mixList);
   try {
     // console.log(mixTitle, mixList);
     // const newMix = {
@@ -71,13 +71,15 @@ router.post("/", authMiddleware, async (req, res) => {
     //   .sort("-mixIdx")
     //   .limit(1);
 
-    let mix = await Playlist.findOne({ userIdx }).exec();
-
+    let mix = await Playlist.findOne({ userIdx }).sort("-mixIdx").limit(1);
+    // console.log("mix : ", mix);
     let newMix = {
       playListIdx: mix.mixIdx,
       mixTitle: mix.mixTitle,
       mixList: mix.mixList,
     };
+    // console.log("newMix : ", newMix);
+
     res.status(201).json(newMix);
   } catch (error) {
     console.log("err", error);

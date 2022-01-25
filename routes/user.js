@@ -94,7 +94,7 @@ router.post("/login", async (req, res) => {
       return;
     }
 
-    const authenticate = await bcrypt.compare(password, user.hashedPassword);
+    const authenticate = await bcrypt.compare(password, user.hashedPassword); // 비밀번호 매치 검사
 
     if (authenticate === true) {
       const token = jwt.sign({ userIdx: user.userIdx }, jwtKey);

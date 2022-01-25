@@ -45,11 +45,13 @@ router.post("/notice", authMiddleware, async (req, res) => {
     // console.log("DB create OK");
 
     let newH = 0;
-    // timePA === "PM" ? (newH = hour + 12) : (newH = hour);
+
     if (timePA === "PM" && hour === 12) {
       newH = hour;
     } else if (timePA === "PM") {
       newH = hour + 12;
+    } else if (timePA === "AM" && hour === 12) {
+      newH = 0;
     } else {
       newH = hour;
     }
@@ -161,11 +163,12 @@ router.put("/notice/users/:userIdx", authMiddleware, async (req, res) => {
       //  push alarm?
       let newH = 0;
 
-      // timePA === "PM" ? (newH = hour + 12) : (newH = hour);
       if (timePA === "PM" && hour === 12) {
         newH = hour;
       } else if (timePA === "PM") {
         newH = hour + 12;
+      } else if (timePA === "AM" && hour === 12) {
+        newH = 0;
       } else {
         newH = hour;
       }

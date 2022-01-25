@@ -1,5 +1,4 @@
 const express = require("express");
-
 const router = express.Router();
 const moment = require("moment");
 const Diary = require("../schemas/diaries");
@@ -33,19 +32,6 @@ router.post("/diaries", authMiddleware, async (req, res) => {
       .replace(/\..*/, "");
     const scoreAvg = feelScore + sleepScore;
 
-    // await Diary.create({
-    //   diaryIdx,
-    //   userIdx,
-    //   yearMonth,
-    //   day,
-    //   feelScore,
-    //   sleepScore,
-    //   comment,
-    //   createdAt,
-    //   inputDate,
-    //   scoreAvg,
-    // });
-
     await Diary.create({
       diaryIdx,
       userIdx,
@@ -59,18 +45,7 @@ router.post("/diaries", authMiddleware, async (req, res) => {
       scoreAvg,
     });
 
-    // const getDiary = await Diary.find(
-    //   { userIdx, yearMonth, day },
-    //   {
-    //     _id: 0,
-    //     diaryIdx: 1,
-    //     yearMonth: 1,
-    //     day: 1,
-    //     feelScore: 1,
-    //     sleepScore: 1,
-    //     comment: 1,
-    //   }
-    // ).sort("day");
+    // const getDiary = await Diary.find({ userIdx, yearMonth, day },{_id: 0,diaryIdx: 1,yearMonth: 1,day: 1,feelScore: 1,sleepScore: 1,comment: 1,}).sort("day");
     res.status(201).send({
       diaryIdx,
       day,
