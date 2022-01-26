@@ -4,13 +4,13 @@ const dotenv = require("dotenv");
 dotenv.config();
 // require("dotenv").config();
 const production = process.env.PRODUCTION;
-const production1 = process.env.PRODUCTION;
+const seoul = process.env.PRODUCTION1;
 const dev1 = process.env.DEV;
 const connect = () => {
   // PRODUCTION = "mongodb://test:test@54.180.109.58:27017"
   // DEV = "mongodb://localhost/hanghae4"
   mongoose
-    .connect(production, {
+    .connect(seoul, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })

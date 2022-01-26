@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const helmet = require("helmet");
 const cors = require("cors");
 // let whitelist = [
 //   "https://www.zzzback.shop",
@@ -48,6 +49,8 @@ const connect = require("./schemas");
 
 connect();
 
+// app.use(helmet()); // 모든 기능 사용
+// app.disable("x-powered-by"); //X-Powered-By 헤더 제거
 // app.use(morgan("dev"));
 app.use(morgan("combined"));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -69,14 +72,23 @@ app.use(
 // );
 
 app.get("/", (req, res) => {
-  res.send("Welcome to Zzz API server test 26");
+  res.send("Welcome to Zzz API server");
 });
 
+// 18.117.86.112 오하이오
 // const options = {
 //   // letsencrypt로 받은 인증서 경로를 입력
 //   ca: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/fullchain.pem"),
 //   key: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/privkey.pem"),
 //   cert: fs.readFileSync("/etc/letsencrypt/live/www.zzzback.shop/cert.pem"),
+// };
+
+// 54.180.117.12 서울
+// const options = {
+//   // letsencrypt로 받은 인증서 경로를 입력
+//   ca: fs.readFileSync("/etc/letsencrypt/live/www.zzzserver.shop/fullchain.pem"),
+//   key: fs.readFileSync("/etc/letsencrypt/live/www.zzzserver.shop/privkey.pem"),
+//   cert: fs.readFileSync("/etc/letsencrypt/live/www.zzzserver.shop/cert.pem"),
 // };
 
 app.use("/api", express.urlencoded({ extended: false }), userRouter);
@@ -90,10 +102,11 @@ app.use(
   playlistRouter
 );
 
-// 18.117.86.112
+// 배포
 // http.createServer(app).listen(port);
 // https.createServer(options, app).listen(443);
 
+// dev
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port}`);
 });
