@@ -54,12 +54,6 @@ router.post("/", authMiddleware, async (req, res) => {
     //     mixList,
     //     userIdx,
     // };
-    if (mixTitle.length <= 18) {
-      res.status(400).send({
-        errorMessage: "글자수 초과",
-      });
-      return;
-    }
 
     await Playlist.create({ mixTitle, mixList, userIdx });
     // playListIdx = mixIdx, mixTitle, mixList
