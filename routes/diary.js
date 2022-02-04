@@ -45,7 +45,6 @@ router.post("/diaries", authMiddleware, async (req, res) => {
       scoreAvg,
     });
 
-    // const getDiary = await Diary.find({ userIdx, yearMonth, day },{_id: 0,diaryIdx: 1,yearMonth: 1,day: 1,feelScore: 1,sleepScore: 1,comment: 1,}).sort("day");
     res.status(201).send({
       diaryIdx,
       day,
@@ -65,11 +64,11 @@ router.get(
   "/diaries/:yearMonth/users/:userIdx",
   authMiddleware,
   async (req, res) => {
-    const { userIdx } = req.params; // 28
-    const { yearMonth } = req.params; // 2022-1
+    const { userIdx } = req.params;
+    const { yearMonth } = req.params;
     const { user } = res.locals;
     try {
-      const arrIdx = [parseInt(userIdx)]; // Diary schema에 DB 존재하는지 파악
+      const arrIdx = [parseInt(userIdx)];
       const userIdxDb = await Diary.find(
         { userIdx },
         { _id: 0, userIdx: 1 }

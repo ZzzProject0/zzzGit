@@ -1,39 +1,38 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
-const autoIncrement = require('mongoose-auto-increment');
-require('dotenv').config();
+const autoIncrement = require("mongoose-auto-increment");
+require("dotenv").config();
 
 const dev1 = process.env.DEV;
-const production = process.env.PRODUCTION;
-const connection = mongoose.createConnection(production);
+const production1 = process.env.PRODUCTION1;
+const connection = mongoose.createConnection(production1);
 autoIncrement.initialize(connection);
 
 const playlistsSchema = new Schema(
-    {
-        mixIdx: { type: Number, required: true },
-        mixTitle: { type: String, required: true },
+  {
+    mixIdx: { type: Number, required: true },
+    mixTitle: { type: String, required: true },
 
+    mixList: [
+      {
+        asmrUrl: String,
+        sound: String,
+        iconUrl: String,
+        title: String,
+      },
+    ],
 
-        mixList: [{
-            asmrUrl: String,
-            sound: String,
-            iconUrl: String,
-            title: String
-
-        }],
-
-        userIdx: { type: Number, default: null },
-
-    },
-    { timestamps: true },
+    userIdx: { type: Number, default: null },
+  },
+  { timestamps: true }
 );
 
 playlistsSchema.plugin(autoIncrement.plugin, {
-    model: '_id',
-    field: 'mixIdx',
-    startAt: 0,
-    increment: 1,
+  model: "_id",
+  field: "mixIdx",
+  startAt: 0,
+  increment: 1,
 });
 
-module.exports = mongoose.model('playlist', playlistsSchema);
+module.exports = mongoose.model("playlist", playlistsSchema);

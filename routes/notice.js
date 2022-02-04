@@ -19,7 +19,7 @@ router.post("/notice", authMiddleware, async (req, res) => {
   const { sleepChk, timePA, hour, min, pushToken } = req.body;
   const { user } = res.locals;
   const { userIdx } = user;
-  // console.log("pushToken1 : ", pushToken);
+
   try {
     const recentNotice = await Notice.find().sort("-noticeIdx").limit(1);
     let noticeIdx = 1;
@@ -42,7 +42,6 @@ router.post("/notice", authMiddleware, async (req, res) => {
       createdAt,
     });
     await User.updateOne({ userIdx }, { $set: { noticeSet: true } });
-    // console.log("DB create OK");
 
     let newH = 0;
 
@@ -62,12 +61,9 @@ router.post("/notice", authMiddleware, async (req, res) => {
 
     if (sleepChk === false) {
       schedule.cancelJob(idx);
-      // console.log("sleepChk false");
     } else {
       schedule.cancelJob(idx);
-      // console.log("sleepChk true");
       let j = schedule.scheduleJob(idx, pushSet, async () => {
-        // console.log("pushToken2 : ", pushToken);
         const message = {
           notification: {
             title: "Zzz 알림",
@@ -75,9 +71,8 @@ router.post("/notice", authMiddleware, async (req, res) => {
           },
           token: pushToken,
         };
-        // console.log("post 1");
+
         try {
-          // console.log("post 2 try");
           await admin
             .messaging()
             .send(message)
@@ -105,8 +100,8 @@ router.post("/notice", authMiddleware, async (req, res) => {
 // 알람 정보
 router.get("/notice/users/:userIdx", authMiddleware, async (req, res) => {
   const { userIdx } = req.params;
-  const { user } = res.locals; // 토큰 user
-  const noticeUser = await Notice.findOne({ userIdx }); // param으로 notice.userIdx
+  const { user } = res.locals;
+  const noticeUser = await Notice.findOne({ userIdx });
   const tokenUser = user.userIdx;
   const dbUser = noticeUser.userIdx;
 
@@ -141,11 +136,10 @@ router.get("/notice/users/:userIdx", authMiddleware, async (req, res) => {
 router.put("/notice/users/:userIdx", authMiddleware, async (req, res) => {
   const { userIdx } = req.params;
   const { sleepChk, timePA, hour, min, pushToken } = req.body;
-  const { user } = res.locals; // 토큰 user
-  const noticeUser = await Notice.findOne({ userIdx }); // param으로 notice.userIdx
+  const { user } = res.locals;
+  const noticeUser = await Notice.findOne({ userIdx });
   const tokenUser = user.userIdx;
   const dbUser = noticeUser.userIdx;
-  // console.log("pushToken1 : ", pushToken);
   try {
     if (tokenUser === dbUser) {
       await Notice.updateOne(
@@ -159,8 +153,6 @@ router.put("/notice/users/:userIdx", authMiddleware, async (req, res) => {
           },
         }
       );
-      // console.log("DB update OK");
-      //  push alarm?
       let newH = 0;
 
       if (timePA === "PM" && hour === 12) {
@@ -177,13 +169,11 @@ router.put("/notice/users/:userIdx", authMiddleware, async (req, res) => {
 
       if (sleepChk === false) {
         schedule.cancelJob(userIdx);
-        // console.log("sleepChk false");
       } else {
         // schedule.gracefulShutdown(); // 강제 종료
         schedule.cancelJob(userIdx);
-        // console.log("sleepChk true");
+
         let j = schedule.scheduleJob(userIdx, pushSet, async () => {
-          // console.log("pushToken2 : ", pushToken);
           const message = {
             notification: {
               title: "Zzz 알림",
@@ -191,9 +181,8 @@ router.put("/notice/users/:userIdx", authMiddleware, async (req, res) => {
             },
             token: pushToken,
           };
-          // console.log("put 1");
+
           try {
-            // console.log("put 2 try");
             await admin
               .messaging()
               .send(message)

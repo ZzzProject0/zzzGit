@@ -14,9 +14,6 @@ router.get("/users/:userIdx", async (req, res) => {
     if (!target) {
       throw new Error(ERROR.NO_EXISTS_DATA);
     }
-    // console.log(target);
-    // console.log(target.mixTitle);
-    // console.log(target.mixList);
 
     let mix = [];
     for (let i = 0; i < target.length; i++) {
@@ -31,8 +28,6 @@ router.get("/users/:userIdx", async (req, res) => {
       });
     }
 
-    // console.log(mix);
-
     res.status(201).json(mix);
   } catch (err) {
     console.log("err", err);
@@ -43,10 +38,8 @@ router.get("/users/:userIdx", async (req, res) => {
 // Create a playlist
 router.post("/", authMiddleware, async (req, res) => {
   const { userIdx } = res.locals.user;
-  // console.log("userIdx : ", userIdx);
-  // console.log("creating new playlist");
   const { mixTitle, mixList } = req.body;
-  // console.log("body : ", mixTitle, mixList);
+
   try {
     // console.log(mixTitle, mixList);
     // const newMix = {
