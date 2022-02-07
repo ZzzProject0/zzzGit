@@ -23,3 +23,57 @@ asmr 커스텀도 함께 제공되며, 그 날의 수면 기록을 남길 수 �
 - [API 문서 링크](https://documenter.getpostman.com/view/18707207/UVXgKwhJ)
 
 ## 2. Project Architecture
+![슬라이드4](https://user-images.githubusercontent.com/87823892/152728855-ae980301-609a-419d-bfb3-9fd0253a4ed8.PNG)
+- 백엔드에서는 기존의 Filezila 사용 시 업로드 시간이 오래걸리고 불편한 부분을 최소화하기 위해 jenkins를 이용하여 불필요한 단계를 간소화 시켰으며, 자동배포로 배포 시간을 줄여 안정성을 높였습니다.
+깃허브와 젠킨스는 웹훅으로 연결되어 코드가 푸시되면 젠킨스에서 미리 설정해놓은 스크립트 파일을 실행합니다.
+스크립트는 젠킨스에서 ssh로 노드 서버에 연결하여 git pull 그리고 pm2 reload로 자동배포를 구현하였습니다.
+
+## 3. Backend Tech Stacks
+|Name|Tech|
+|------|---|
+|Sever|Node.js  Express|
+|Language|Javascript|
+|Database|MongoDB|
+|CI/CD|Jenkins|
+
+## 4. Library
+|Package|Description|
+|------|---|
+|bcrypt|bcrypt JWT 토큰 암호화|
+|body-parser|요청의 본문을 해석해주는 미들웨어|
+|cors|CORS 핸들링|
+|dotenv|환경변수 핸들링|
+|firebase-admin|특정 유저에게 알림 전송|
+|fs|SSL 인증서 처리|
+|helmet|웹 서비스 보안|
+|http|http 내장 모듈|
+|https|https 내장 모듈|
+|joi|유저 회원가입 시 입력값 유효성 체크|
+|jsonwebtoken|로그인 시 JWT 발급|
+|moment|날짜 지원 라이브러리|
+|mongoose|mongoDB 사용을 위한 노드의 확장 모듈|
+|mongoose-auto-increment|고유값 자동 증가|
+|morgan|요청 로그 관리|
+|node-schedule|특정 시간에 알람 전송|
+
+## 5. 주요기능
+### 1. 로그인/회원가입
+- 영문 소문자, 숫자,  특수기호를 이용하여 아이디와 비밀번호를 설정할 수 있습니다.
+- JWT 방식으로 보안된 다양한 로그인 방식을 제공합니다.
+  - 일반 로그인
+  - 소셜 로그인(KaKaO)
+- 회원가입 시 비밀번호의 보안을 위해 bcrypt 모듈을 사용하였습니다.
+### 2. 알림
+- Firebase를 통해 특정 유저에게 Push 알림 서비스를 제공합니다.
+- Node-schedule을 사용하여 특정 시간 알림 전송을 구현하였습니다.
+### 3. ASMR
+- ASMR을 커스텀하여 저장 가능합니다.
+### 4. 다이어리
+- 저번주와 이번주 수면 점수를 기반으로 수면 통계 점수를 알려드립니다.
+- 수면 점수 기록으로 수면 상태 파악이 가능합니다.
+### 5. 보안
+- 비공개 정보를 dotenv 파일로 관리합니다.
+- letsencrypt 인증으로 https를 설정하였습니다.
+- CORS 사용 시 whirelist 관리로 신뢰 가능한 도메인의 요청만 받습니다.
+- helmet을 이용하여 HTTP 헤더 설정을 해제하였습니다.
+
